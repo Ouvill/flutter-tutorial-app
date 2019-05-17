@@ -68,15 +68,43 @@ class RandomWordsState extends State<RandomWords> {
   }
   // #enddocregion _buildRow
 
+
+  void _pushSaved() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (BuildContext context) {
+        final Iterable<ListTile> tiles = _saved.map(
+            (WordPair pair) {
+              return ListTile(
+                title: Text(
+                  pair.asPascalCase,
+                  style: _biggerFont,
+                ),
+              );
+            }
+        );
+        final List<Widget> divided = ListTile.divideTiles(tiles: tiles,context: context).toList();
+        return Scaffold(
+          appBar: AppBar(title: Text("Saved Suggestions")),
+          body: ListView(children: divided)
+        );
+      })
+    );
+
+  }
+
   // #docregion RWS-build
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Startup Name Generator'),
+        actions: <Widget> [
+          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+        ]
       ),
       body: _buildSuggestions(),
     );
+
   }
 // #enddocregion RWS-build
 // #docregion RWS-var
